@@ -18,10 +18,13 @@ const port = 5000 || process.env.PORT;
 
 const ProductData = new require("./ProductAdd");
 const authData = new require("./Auth");
-const userLogin = new require("./Login");
 const orderData = new require('./Order');
 
 // Product CRUD
+
+app.get("/" , async(req ,res)=>{
+  res.send("Welcome to the Farmer's E-commerce Server!"); 
+})
 
 app.get("/product", async (req, res) => {
   // console.log("Product Get");
