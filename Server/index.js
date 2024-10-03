@@ -14,7 +14,7 @@ const bcrypt = require("bcryptjs");
 
 const JWT_SECRET = "your_jwt_secret_key"; // Replace with a secure key
 
-const port = 5000;
+const port = 5000 || process.env.PORT;
 
 const ProductData = new require("./ProductAdd");
 const authData = new require("./Auth");
