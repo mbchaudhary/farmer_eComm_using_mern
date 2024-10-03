@@ -31,7 +31,7 @@ export default function SimpleSlider() {
     ],
   };
 
-  const apiURL = "http://localhost:5000/product";
+  const apiURL = "https://farmer-backend-y5qj.onrender.com/product";
   const [data, setData] = useState([]);
   const nav = useNavigate();
 

@@ -12,7 +12,7 @@ export default function AdminHome() {
 
   useEffect(() => {
     if (email) {
-      fetch(`http://localhost:5000/products/${email}`)
+      fetch(`https://farmer-backend-y5qj.onrender.com/products/${email}`)
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {
@@ -36,7 +36,7 @@ export default function AdminHome() {
 
   // Function to handle product deletion
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/products/${id}`, {
+    fetch(`https://farmer-backend-y5qj.onrender.com/products/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

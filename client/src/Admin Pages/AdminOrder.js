@@ -9,7 +9,7 @@ export default function AdminOrder() {
   // Fetch the admin's orders when the component loads
   useEffect(() => {
     if (useremail) {
-      fetch(`http://localhost:5000/adminorder/${useremail}`)
+      fetch(`https://farmer-backend-y5qj.onrender.com/adminorder/${useremail}`)
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {
@@ -37,7 +37,7 @@ export default function AdminOrder() {
     if (confirmDelete.isConfirmed) {
       try {
         const response = await fetch(
-          `http://localhost:5000/orderDelete/${id}`,
+          `https://farmer-backend-y5qj.onrender.com/orderDelete/${id}`,
           {
             method: "DELETE",
           }
@@ -74,7 +74,7 @@ export default function AdminOrder() {
     setLoading(true); // Set loading state to true
     try {
       const response = await fetch(
-        `http://localhost:5000/updateOrderStatus/${id}`,
+        `https://farmer-backend-y5qj.onrender.com/updateOrderStatus/${id}`,
         {
           method: "PUT",
           headers: {

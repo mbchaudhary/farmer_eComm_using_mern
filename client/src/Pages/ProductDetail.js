@@ -18,7 +18,7 @@ export default function ProductDetail() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/product/" + param.id
+          "https://farmer-backend-y5qj.onrender.com/product/" + param.id
         );
         if (!response.ok) {
           throw new Error("Product not found");
@@ -112,7 +112,7 @@ export default function ProductDetail() {
     console.log(orderData);
 
     try {
-      const response = await fetch("http://localhost:5000/order", {
+      const response = await fetch("https://farmer-backend-y5qj.onrender.com/order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

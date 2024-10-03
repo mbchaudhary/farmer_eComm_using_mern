@@ -5,7 +5,7 @@ import SimpleSlider from "./SimpleSlider";
 import { Form, InputGroup, Button, Container, Row, Col } from "react-bootstrap"; // Bootstrap components for layout
 
 export default function Home() {
-  const apiURL = "http://localhost:5000/product";
+  const apiURL = "https://farmer-backend-y5qj.onrender.com/product";
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
   const nav = useNavigate();
