@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductDetail() {
+
+  const nav = useNavigate();
+
   const param = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -118,7 +122,8 @@ export default function ProductDetail() {
           text: "Your order has been submitted.",
         }).then(() => {
           // Reload the page after user acknowledges the success alert
-          window.location.reload();
+          // window.location.reload();
+          nav('/home');
         });
       } else {
         throw new Error("Failed to place order");
