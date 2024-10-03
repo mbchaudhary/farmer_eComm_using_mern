@@ -30,6 +30,18 @@ app.get("/" , async(req ,res)=>{
   res.send("Welcome to the Farmer's E-commerce Server!"); 
 })
 
+
+app.get("/userData", async (req, res) => {
+  // console.log("Product Get");
+
+  try {
+    let result = await authData.find();
+
+    res.send(result);
+  } catch (error) {
+    res.status(200).json({ error: true });
+  }
+});
 app.get("/product", async (req, res) => {
   // console.log("Product Get");
 

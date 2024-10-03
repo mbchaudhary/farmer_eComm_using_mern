@@ -18,7 +18,7 @@ export default function ProductDetail() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          "https://farmer-backend-y5qj.onrender.com/product/" + param.id
+          "http://localhost:5000/product/" + param.id
         );
         if (!response.ok) {
           throw new Error("Product not found");
@@ -83,14 +83,7 @@ export default function ProductDetail() {
       });
       return;
     }
-
-    // localStorage.setItem('admin')
-
-    console.log(userEmail);
-    console.log("Admin Email: ", adminEmail);
-    console.log("User ID: ", userID);
-    console.log("Admin Mobile NO: ", adminmobile);
-
+  
     const orderData = {
       image: product.image,
       pname: product.pname,
@@ -108,23 +101,24 @@ export default function ProductDetail() {
       bid2: bidPrice2,
       status: isStatus,
     };
-
-    console.log(orderData);
-
+  
     try {
-      const response = await fetch("https://farmer-backend-y5qj.onrender.com/order", {
+      const response = await fetch("http://localhost:5000/order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(orderData),
       });
-
+  
       if (response.ok) {
         Swal.fire({
           icon: "success",
           title: "Order placed successfully!",
           text: "Your order has been submitted.",
+        }).then(() => {
+          // Reload the page after user acknowledges the success alert
+          window.location.reload();
         });
       } else {
         throw new Error("Failed to place order");
@@ -138,6 +132,7 @@ export default function ProductDetail() {
       console.error("Error placing order:", error);
     }
   };
+  
 
   return (
     <div className="container mt-4">
