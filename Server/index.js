@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const DBConnection = require("./config");
 
 require("./config");
 
@@ -13,6 +14,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const JWT_SECRET = "your_jwt_secret_key"; // Replace with a secure key
+
+//connect mongo
+DBConnection();
 
 const port = 5000 || process.env.PORT;
 
