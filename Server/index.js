@@ -303,6 +303,7 @@ app.post("/order", async (req, res) => {
       userID,
       totalprice,  // Corrected field name
       status,
+      orderDate,
       bid1,
       bid2,
     } = req.body;
@@ -322,6 +323,7 @@ app.post("/order", async (req, res) => {
       userID,
       totalprice,  // Corrected field name
       status,
+      orderDate,
       bid1,
       bid2,
     });

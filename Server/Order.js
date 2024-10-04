@@ -66,6 +66,11 @@ const orderSchema = mongoose.Schema({
         required: true
     },
 
+    orderDate:{
+        type:String,
+        required: true
+    },
+
     bid1:{
         type:String,
         required: true

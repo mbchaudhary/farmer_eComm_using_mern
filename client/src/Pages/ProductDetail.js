@@ -4,26 +4,22 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 export default function ProductDetail() {
-
   const nav = useNavigate();
-
   const param = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState();
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState();
   const [bidPrice1, setBidPrice1] = useState();
   const [bidPrice2, setBidPrice2] = useState();
 
-  const isStatus = "Pendding";
+  const isStatus = "Pending";
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/product/" + param.id
-        );
+        const response = await fetch("http://localhost:5000/product/" + param.id);
         if (!response.ok) {
           throw new Error("Product not found");
         }
@@ -38,8 +34,6 @@ export default function ProductDetail() {
 
     fetchProduct();
   }, [param]);
-
-  // console.log(product.adminemail);
 
   const userEmail = localStorage.getItem("useremail");
   const usermobileno = localStorage.getItem("mobileno");
@@ -88,6 +82,10 @@ export default function ProductDetail() {
       return;
     }
   
+    // Get the current date and format it as DD/MM/YYYY
+    const orderDate = new Date();
+    const formattedOrderDate = `${orderDate.getDate().toString().padStart(2, '0')}/${(orderDate.getMonth() + 1).toString().padStart(2, '0')}/${orderDate.getFullYear()}`;
+  
     const orderData = {
       image: product.image,
       pname: product.pname,
@@ -101,6 +99,7 @@ export default function ProductDetail() {
       adminemail: adminEmail,
       userID: userID,
       totalprice: totalPrice,
+      orderDate: formattedOrderDate, // Use formatted date here
       bid1: bidPrice1,
       bid2: bidPrice2,
       status: isStatus,
@@ -121,9 +120,7 @@ export default function ProductDetail() {
           title: "Order placed successfully!",
           text: "Your order has been submitted.",
         }).then(() => {
-          // Reload the page after user acknowledges the success alert
-          // window.location.reload();
-          nav('/home');
+          nav('/home'); // Navigate to home after success
         });
       } else {
         throw new Error("Failed to place order");
@@ -255,7 +252,7 @@ export default function ProductDetail() {
                 <button
                   className="btn primaryBGColor btn-lg"
                   type="button"
-                  onClick={() => handleButton()}
+                  onClick={handleButton}
                 >
                   Order
                 </button>

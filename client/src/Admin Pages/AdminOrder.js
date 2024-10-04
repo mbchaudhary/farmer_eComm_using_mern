@@ -23,51 +23,51 @@ export default function AdminOrder() {
   }, [useremail]);
 
   // Function to delete an order
-  const handleDelete = async (id) => {
-    const confirmDelete = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    });
+  // const handleDelete = async (id) => {
+  //   const confirmDelete = await Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, delete it!",
+  //   });
 
-    if (confirmDelete.isConfirmed) {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/orderDelete/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
-        const result = await response.json();
+  //   if (confirmDelete.isConfirmed) {
+  //     try {
+  //       const response = await fetch(
+  //         `http://localhost:5000/orderDelete/${id}`,
+  //         {
+  //           method: "DELETE",
+  //         }
+  //       );
+  //       const result = await response.json();
 
-        if (response.ok) {
-          setProducts(products.filter((product) => product._id !== id));
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your order has been deleted.",
-            icon: "success",
-          });
-        } else {
-          Swal.fire({
-            title: "Error!",
-            text: result.message,
-            icon: "error",
-          });
-        }
-      } catch (error) {
-        console.error("Error deleting product:", error);
-        Swal.fire({
-          title: "Error!",
-          text: "There was an error deleting your order.",
-          icon: "error",
-        });
-      }
-    }
-  };
+  //       if (response.ok) {
+  //         setProducts(products.filter((product) => product._id !== id));
+  //         Swal.fire({
+  //           title: "Deleted!",
+  //           text: "Your order has been deleted.",
+  //           icon: "success",
+  //         });
+  //       } else {
+  //         Swal.fire({
+  //           title: "Error!",
+  //           text: result.message,
+  //           icon: "error",
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error deleting product:", error);
+  //       Swal.fire({
+  //         title: "Error!",
+  //         text: "There was an error deleting your order.",
+  //         icon: "error",
+  //       });
+  //     }
+  //   }
+  // };
 
   // Function to update order status
   const handleStatusChange = async (id, newStatus) => {
@@ -175,6 +175,9 @@ export default function AdminOrder() {
                   <h6 className="text-muted">
                     Bid: {product.bid1}₹ to {product.bid2}₹
                   </h6>
+                  <h6 className="text-muted">
+                    Order Date: {product.orderDate}
+                  </h6>
                   <h6 className="text-muted">--- Order Status ---</h6>
                   <h6
                     style={{
@@ -190,6 +193,23 @@ export default function AdminOrder() {
                   >
                     Status: {product.status}
                   </h6>
+
+                  <h6 className="text-muted">--- Contact Seller ---</h6>
+                  {/* Clickable Email */}
+                  <h6 className="text-muted">
+                    Email:{" "}
+                    <a href={`mailto:${product.clientemail}`}>
+                      {product.clientemail}
+                    </a>
+                  </h6>
+                  {/* Clickable Phone */}
+                  <h6 className="text-muted">
+                    Mobile No.:{" "}
+                    <a href={`tel:${product.mobileno}`}>
+                      {product.mobileno}
+                    </a>
+                  </h6>
+
                   <div className="form-group mt-3">
                     <select
                       className="form-control"

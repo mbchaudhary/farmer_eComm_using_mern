@@ -117,6 +117,9 @@ export default function Order() {
                   <h6 className="text-muted">
                     Bid: {product.bid1}₹ to {product.bid2}₹
                   </h6>
+                  <h6 className="text-muted">
+                    Order Date: {product.orderDate}
+                  </h6>
                   <h6 className="text-muted">--- Order Status ---</h6>
                   <h6
                     style={{
@@ -134,9 +137,19 @@ export default function Order() {
                   </h6>
 
                   <h6 className="text-muted">--- Contact Seller ---</h6>
-                  <h6 className="text-muted">Email : {product.adminemail}</h6>
+                  {/* Clickable Email */}
                   <h6 className="text-muted">
-                    Mobile No. : {product.adminmobileno}
+                    Email:{" "}
+                    <a href={`mailto:${product.adminemail}`}>
+                      {product.adminemail}
+                    </a>
+                  </h6>
+                  {/* Clickable Phone */}
+                  <h6 className="text-muted">
+                    Mobile No.:{" "}
+                    <a href={`tel:${product.adminmobileno}`}>
+                      {product.adminmobileno}
+                    </a>
                   </h6>
 
                   {product.status !== "Confirm" ? (
