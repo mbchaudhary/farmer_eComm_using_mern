@@ -71,6 +71,70 @@ export default function ProductDetail() {
     return <div className="alert alert-danger text-center mt-5">{error}</div>;
   }
 
+  // const handleButton = async () => {
+  //   // Check if the quantity is valid
+  //   if (quantity > product.qty) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Oops...",
+  //       text: "Enter Valid Stock",
+  //     });
+  //     return;
+  //   }
+  
+  //   // Get the current date and format it as DD/MM/YYYY
+  //   const orderDate = new Date();
+  //   const formattedOrderDate = `${orderDate.getDate().toString().padStart(2, '0')}/${(orderDate.getMonth() + 1).toString().padStart(2, '0')}/${orderDate.getFullYear()}`;
+  
+  //   const orderData = {
+  //     image: product.image,
+  //     pname: product.pname,
+  //     productperunit: product.productperunit,
+  //     currency: product.currency,
+  //     unit: product.unit,
+  //     qty: quantity,
+  //     mobileno: usermobileno,
+  //     adminmobileno: adminmobile,
+  //     clientemail: userEmail,
+  //     adminemail: adminEmail,
+  //     userID: userID,
+  //     totalprice: totalPrice,
+  //     orderDate: formattedOrderDate, // Use formatted date here
+  //     bid1: bidPrice1,
+  //     bid2: bidPrice2,
+  //     status: isStatus,
+  //   };
+  
+  //   try {
+  //     const response = await fetch("http://localhost:5000/order", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(orderData),
+  //     });
+  
+  //     if (response.ok) {
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: "Order placed successfully!",
+  //         text: "Your order has been submitted.",
+  //       }).then(() => {
+  //         nav('/home'); // Navigate to home after success
+  //       });
+  //     } else {
+  //       throw new Error("Failed to place order");
+  //     }
+  //   } catch (error) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Error",
+  //       text: "There was a problem placing your order. Please try again.",
+  //     });
+  //     console.error("Error placing order:", error);
+  //   }
+  // };
+  
   const handleButton = async () => {
     // Check if the quantity is valid
     if (quantity > product.qty) {
@@ -105,8 +169,14 @@ export default function ProductDetail() {
       status: isStatus,
     };
   
+    // Update product quantity
+    const updatedProductData = {
+      qty: product.qty - quantity, // Decrease the quantity by the ordered amount
+    };
+  
     try {
-      const response = await fetch("http://localhost:5000/order", {
+      // Send the order data
+      const orderResponse = await fetch("http://localhost:5000/order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,14 +184,27 @@ export default function ProductDetail() {
         body: JSON.stringify(orderData),
       });
   
-      if (response.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Order placed successfully!",
-          text: "Your order has been submitted.",
-        }).then(() => {
-          nav('/home'); // Navigate to home after success
+      // If order is placed successfully, update the product quantity
+      if (orderResponse.ok) {
+        const updateResponse = await fetch(`http://localhost:5000/editproduct/${product._id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedProductData),
         });
+  
+        if (updateResponse.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "Order placed successfully!",
+            text: "Your order has been submitted.",
+          }).then(() => {
+            nav('/home'); // Navigate to home after success
+          });
+        } else {
+          throw new Error("Failed to update product quantity");
+        }
       } else {
         throw new Error("Failed to place order");
       }
