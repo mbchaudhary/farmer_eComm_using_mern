@@ -45,6 +45,7 @@ export default function Order() {
             icon: "success",
           });
         } else {
+          console.log(result);
           Swal.fire({
             title: "Error!",
             text: result.message, // Notify user of failure

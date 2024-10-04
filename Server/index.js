@@ -371,6 +371,18 @@ app.delete("/orderDelete/:id", async (req, res) => {
 
     const deletedOrder = await orderData.findByIdAndDelete(id);
 
+    console.log("Deleted order :: " , deletedOrder);
+
+    // const product = await ProductData.findById(deletedOrder.productId); // Assuming order has productId field
+
+    // console.log("peroduct :: " , product);
+    // if (!product) {
+    //   return res.status(404).json({ message: "Product not found" });
+    // }
+
+    // product.qty += order.qty; // Add back the quantity from the order
+    // await product.save();
+
     if (!deletedOrder) {
       return res
         .status(404)
