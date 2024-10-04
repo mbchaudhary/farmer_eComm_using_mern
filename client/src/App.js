@@ -6,6 +6,7 @@ import Register from "./Login & Register/Register";
 import ProfilePage from "./Client Routing/ProfilePage";
 import SwitchRole from "./Pages/SwitchRole";
 import ProductDetailPage from "./Client Routing/ProductDetailPage";
+import ServicesPage from "./Client Routing/ServicesPage";
 import OrderPage from "./Client Routing/OrderPage";
 import AdminHomePage from "./Admin Routing/AdminHomePage";
 import AdminOrderPage from "./Admin Routing/AdminOrderPage";
@@ -26,6 +27,7 @@ function App() {
         <Route path="/switchrole" element={<SwitchRole />} />
         <Route path="/productdetail/:id" element={<ProductDetailPage />} />
         <Route path="/orders" element={<OrderPage />} />
+        <Route path="/services" element={<ServicesPage />} />
 
         {/* admin routing */}
 
