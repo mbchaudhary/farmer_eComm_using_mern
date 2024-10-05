@@ -36,7 +36,7 @@ export default function AdminHome() {
 
   // Function to handle product deletion
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/products/${id}`, {
+    fetch(`http://localhost:5000/deleteproduct/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
+import uploadFileUsingCludinaryAPI from "../Util/imgToUrl";
+import { useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
+  const nav = useNavigate();
   const mobileNo = localStorage.getItem('mobileno');
   const emailID = localStorage.getItem('useremail');
 
@@ -19,6 +22,7 @@ export default function AddProduct() {
 
   const [isEditing, setIsEditing] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false); // For loader or disabling button
+  const [isImageUploading, setIsImageUploading] = useState(false); // For image upload loading state
 
   // Define unit options based on currency
   const unitOptions = {
@@ -56,7 +60,7 @@ export default function AddProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isEditing && !isSubmitting) {
+    if (isEditing && !isSubmitting && !isImageUploading) { // Only submit when image is not uploading
       setIsSubmitting(true); // Disable the button during form submission
       try {
         // API call to add product
@@ -81,6 +85,7 @@ export default function AddProduct() {
 
         resetForm(); // Clear the form
         setIsEditing(false); // Disable editing after successful submission
+        nav('/admin_home');
       } catch (error) {
         console.error("Error adding product:", error);
         Swal.fire({
@@ -91,6 +96,27 @@ export default function AddProduct() {
       } finally {
         setIsSubmitting(false); // Re-enable the button
       }
+    }
+  };
+
+  // Handle image upload
+  const handleImageChange = async (e) => {
+    setIsImageUploading(true); // Set loading state for image upload
+    try {
+      let url = await uploadFileUsingCludinaryAPI(e);
+
+      if (url.trim().length !== 0) {
+        setFormData({ ...formData, image: url });
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to upload image. Please try again.",
+        icon: "error",
+      });
+    } finally {
+      setIsImageUploading(false); // Reset loading state
     }
   };
 
@@ -107,18 +133,17 @@ export default function AddProduct() {
           <div className="row">
             {/* Image URL */}
             <div className="col-md-6 mb-3">
-              <label htmlFor="image">Image URL</label>
+              <label htmlFor="image">Image Upload</label>
               <input
-                type="text"
+                type="file"
                 className="form-control shadow-sm"
                 id="image"
                 name="image"
-                placeholder="Enter image URL"
-                value={formData.image}
-                onChange={handleChange}
+                onChange={handleImageChange}
                 readOnly={!isEditing}
                 required
               />
+              {isImageUploading && <p className="text-muted mt-2">Uploading image...</p>}
             </div>
 
             {/* Product Name */}
@@ -143,7 +168,7 @@ export default function AddProduct() {
             <div className="col-md-6 mb-3">
               <label htmlFor="productperunit">Price Per Unit</label>
               <input
-                type="text"
+                type="number"
                 className="form-control shadow-sm"
                 id="productperunit"
                 name="productperunit"
@@ -262,32 +287,20 @@ export default function AddProduct() {
               onChange={handleChange}
               readOnly={!isEditing}
               required
-            ></textarea>
+            />
           </div>
 
-          {/* Submit and Edit Buttons */}
-          <div className="row d-flex justify-content-center">
-            {isEditing ? (
-              <div className="col-md-3 text-center mb-2">
-                <button
-                  type="submit"
-                  className="btn primaryBGColor w-100 shadow-sm"
-                  disabled={isSubmitting} // Disable button while submitting
-                >
-                  {isSubmitting ? "Saving..." : "Save Product"}
-                </button>
-              </div>
-            ) : (
-              <div className="col-md-3 text-center mb-2">
-                <button
-                  type="button"
-                  className="btn btn-secondary w-100 shadow-sm"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit Product
-                </button>
-              </div>
-            )}
+          <div className="row">
+            <div className="col-md-6">
+              {/* Add Product Button */}
+              <button
+                type="submit"
+                className="btn btn-primary shadow-sm"
+                disabled={isSubmitting || isImageUploading}
+              >
+                {isSubmitting ? "Adding Product..." : "Add Product"}
+              </button>
+            </div>
           </div>
         </form>
       </div>
