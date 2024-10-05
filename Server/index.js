@@ -290,16 +290,10 @@ app.post("/order", async (req, res) => {
 
   try {
     let {
-      image,
-      pname,
-      productperunit,
-      currency,
-      unit,
+      productId,
       qty,
       mobileno,
-      adminmobileno,
       clientemail,
-      adminemail,
       userID,
       totalprice,  // Corrected field name
       status,
@@ -310,16 +304,10 @@ app.post("/order", async (req, res) => {
 
     // Creating a new order object using the schema
     let result = new orderData({
-      image,
-      pname,
-      productperunit,
-      currency,
-      unit,
+      productId,
       qty,
       mobileno,
-      adminmobileno,
       clientemail,
-      adminemail,
       userID,
       totalprice,  // Corrected field name
       status,
@@ -348,7 +336,8 @@ app.get("/orders/:clientemail", async (req, res) => {
     // console.log
 
     console.log("Try catch email", clientemail);
-    const order = await orderData.find({clientemail: clientemail });
+    const order = await orderData.find({clientemail: clientemail }).populate("productId");
+    // const order = await orderData.find({clientemail: clientemail });
     // const order = await orderData.findOne();
 
     console.log(order);
@@ -371,17 +360,20 @@ app.delete("/orderDelete/:id", async (req, res) => {
 
     const deletedOrder = await orderData.findByIdAndDelete(id);
 
-    console.log("Deleted order :: " , deletedOrder);
+    console.log(deletedOrder);
 
-    // const product = await ProductData.findById(deletedOrder.productId); // Assuming order has productId field
+
+    const product = await ProductData.findById(deletedOrder.productId); // Assuming order has productId field
+
+    
 
     // console.log("peroduct :: " , product);
-    // if (!product) {
-    //   return res.status(404).json({ message: "Product not found" });
-    // }
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
-    // product.qty += order.qty; // Add back the quantity from the order
-    // await product.save();
+    product.qty =  parseInt(product.qty) + parseInt(deletedOrder.qty); // Add back the quantity from the order
+    await product.save();
 
     if (!deletedOrder) {
       return res

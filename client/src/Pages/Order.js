@@ -96,9 +96,9 @@ export default function Order() {
                 }
               >
                 <img
-                  src={product.image || "https://via.placeholder.com/200"} // Placeholder if no image
+                  src={product.productId.image || "https://via.placeholder.com/200"} // Placeholder if no image
                   className="card-img-top"
-                  alt={product.pname}
+                  alt={product.productId.pname}
                   style={{
                     height: "200px",
                     objectFit: "cover",
@@ -107,13 +107,13 @@ export default function Order() {
                 />
                 <div className="card-body text-center">
                   <h5 className="card-title font-weight-bold text-dark">
-                    {product.pname}
+                    {product.productId.pname}
                   </h5>
                   <h6 className="text-muted">
-                    Order: {product.qty} {product.unit}
+                    Order: {product.qty} {product.productId.unit}
                   </h6>
                   <h6 className="text-muted">
-                    Price: {product.productperunit}₹ / {product.unit}
+                    Price: {product.productId.productperunit}₹ / {product.productId.unit}
                   </h6>
                   <h6 className="text-muted">
                     Bid: {product.bid1}₹ to {product.bid2}₹
@@ -141,15 +141,15 @@ export default function Order() {
                   {/* Clickable Email */}
                   <h6 className="text-muted">
                     Email:{" "}
-                    <a href={`mailto:${product.adminemail}`}>
-                      {product.adminemail}
+                    <a href={`mailto:${product.productId.adminemail}`}>
+                      {product.productId.adminemail}
                     </a>
                   </h6>
                   {/* Clickable Phone */}
                   <h6 className="text-muted">
                     Mobile No.:{" "}
-                    <a href={`tel:${product.adminmobileno}`}>
-                      {product.adminmobileno}
+                    <a href={`tel:${product.productId.mobileno}`}>
+                      {product.productId.mobileno}
                     </a>
                   </h6>
 
