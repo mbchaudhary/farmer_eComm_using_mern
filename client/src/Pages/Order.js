@@ -14,8 +14,6 @@ export default function Order() {
     }
   }, [userEmail]);
 
-  console.log("Email is: ", userEmail);
-
   const handleDelete = async (id) => {
     const confirmDelete = await Swal.fire({
       title: "Are you sure?",
@@ -96,9 +94,9 @@ export default function Order() {
                 }
               >
                 <img
-                  src={product.productId.image || "https://via.placeholder.com/200"} // Placeholder if no image
+                  src={product.image || "https://via.placeholder.com/200"} // Placeholder if no image
                   className="card-img-top"
-                  alt={product.productId.pname}
+                  alt={product.pname}
                   style={{
                     height: "200px",
                     objectFit: "cover",
@@ -107,13 +105,13 @@ export default function Order() {
                 />
                 <div className="card-body text-center">
                   <h5 className="card-title font-weight-bold text-dark">
-                    {product.productId.pname}
+                    {product.pname}
                   </h5>
                   <h6 className="text-muted">
-                    Order: {product.qty} {product.productId.unit}
+                    Order: {product.qty} {product.unit}
                   </h6>
                   <h6 className="text-muted">
-                    Price: {product.productId.productperunit}₹ / {product.productId.unit}
+                    Price: {product.productperunit}₹ / {product.unit}
                   </h6>
                   <h6 className="text-muted">
                     Bid: {product.bid1}₹ to {product.bid2}₹
@@ -141,15 +139,15 @@ export default function Order() {
                   {/* Clickable Email */}
                   <h6 className="text-muted">
                     Email:{" "}
-                    <a href={`mailto:${product.productId.adminemail}`}>
-                      {product.productId.adminemail}
+                    <a href={`mailto:${product.adminemail}`}>
+                      {product.adminemail}
                     </a>
                   </h6>
                   {/* Clickable Phone */}
                   <h6 className="text-muted">
                     Mobile No.:{" "}
-                    <a href={`tel:${product.productId.mobileno}`}>
-                      {product.productId.mobileno}
+                    <a href={`tel:${product.mobileno}`}>
+                      {product.mobileno}
                     </a>
                   </h6>
 

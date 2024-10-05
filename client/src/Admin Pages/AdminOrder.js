@@ -9,7 +9,7 @@ export default function AdminOrder() {
   // Fetch the admin's orders when the component loads
   useEffect(() => {
     if (useremail) {
-      fetch(`http://localhost:5000/adminorder/${useremail}`)
+      fetch(`http://localhost:5000/AdminOrders/${useremail}`) // Updated API path
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {
@@ -23,66 +23,67 @@ export default function AdminOrder() {
   }, [useremail]);
 
   // Function to delete an order
-  // const handleDelete = async (id) => {
-  //   const confirmDelete = await Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   });
+  const handleDelete = async (id) => {
+    const confirmDelete = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-  //   if (confirmDelete.isConfirmed) {
-  //     try {
-  //       const response = await fetch(
-  //         `http://localhost:5000/orderDelete/${id}`,
-  //         {
-  //           method: "DELETE",
-  //         }
-  //       );
-  //       const result = await response.json();
+    if (confirmDelete.isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:5000/orderDelete/${id}`, {
+          method: "DELETE",
+        });
+        const result = await response.json();
 
-  //       if (response.ok) {
-  //         setProducts(products.filter((product) => product._id !== id));
-  //         Swal.fire({
-  //           title: "Deleted!",
-  //           text: "Your order has been deleted.",
-  //           icon: "success",
-  //         });
-  //       } else {
-  //         Swal.fire({
-  //           title: "Error!",
-  //           text: result.message,
-  //           icon: "error",
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error deleting product:", error);
-  //       Swal.fire({
-  //         title: "Error!",
-  //         text: "There was an error deleting your order.",
-  //         icon: "error",
-  //       });
-  //     }
-  //   }
-  // };
+        if (response.ok) {
+          setProducts(products.filter((product) => product._id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your order has been deleted.",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: result.message,
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.error("Error deleting order:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "There was an error deleting your order.",
+          icon: "error",
+        });
+      }
+    }
+  };
 
   // Function to update order status
   const handleStatusChange = async (id, newStatus) => {
     setLoading(true); // Set loading state to true
+
+    if (newStatus === "Cancel") {
+      await handleDelete(id); // Call delete function if status is 'Cancel'
+      setLoading(false);
+      return; // Exit early to prevent further actions
+    }
+
     try {
-      const response = await fetch(
-        `http://localhost:5000/updateOrderStatus/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
+      const response = await fetch(`http://localhost:5000/updateOrderStatus/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
 
       const result = await response.json();
 
@@ -133,112 +134,103 @@ export default function AdminOrder() {
             <h5 className="text-muted">No products found for this admin.</h5>
           </div>
         ) : (
-          products.map((product) => (
-            <div
-              className="col-lg-4 col-md-6 d-flex justify-content-center mb-5"
-              key={product._id}
-            >
+          products.map((product) => {
+            return (
               <div
-                className="card shadow-lg border-light rounded-lg"
-                style={{
-                  width: "18rem",
-                  transition: "transform 0.3s",
-                  overflow: "hidden",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.05)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
+                className="col-lg-4 col-md-6 d-flex justify-content-center mb-5"
+                key={product._id}
               >
-                <img
-                  src={product.image || "https://via.placeholder.com/200"}
-                  className="card-img-top"
-                  alt={product.pname}
+                <div
+                  className="card shadow-lg border-light rounded-lg"
                   style={{
-                    height: "200px",
-                    objectFit: "cover",
-                    borderRadius: "10px 10px 0 0",
+                    width: "18rem",
+                    transition: "transform 0.3s",
+                    overflow: "hidden",
                   }}
-                />
-                <div className="card-body text-center">
-                  <h5 className="card-title font-weight-bold text-dark">
-                    {product.pname}
-                  </h5>
-                  <h6 className="text-muted">
-                    Order: {product.qty} {product.unit}
-                  </h6>
-                  <h6 className="text-muted">
-                    Price: {product.productperunit}₹ / {product.unit}
-                  </h6>
-                  <h6 className="text-muted">
-                    Bid: {product.bid1}₹ to {product.bid2}₹
-                  </h6>
-                  <h6 className="text-muted">
-                    Order Date: {product.orderDate}
-                  </h6>
-                  <h6 className="text-muted">--- Order Status ---</h6>
-                  <h6
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <img
+                    src={product.image || "https://via.placeholder.com/200"}
+                    className="card-img-top"
+                    alt={product.pname}
                     style={{
-                      color:
-                        product.status === "Confirm"
-                          ? "green"
-                          : product.status === "Pending"
-                          ? "blue"
-                          : product.status === "Cancel"
-                          ? "red"
-                          : "black",
+                      height: "200px",
+                      objectFit: "cover",
+                      borderRadius: "10px 10px 0 0",
                     }}
-                  >
-                    Status: {product.status}
-                  </h6>
-
-                  <h6 className="text-muted">--- Contact Seller ---</h6>
-                  {/* Clickable Email */}
-                  <h6 className="text-muted">
-                    Email:{" "}
-                    <a href={`mailto:${product.clientemail}`}>
-                      {product.clientemail}
-                    </a>
-                  </h6>
-                  {/* Clickable Phone */}
-                  <h6 className="text-muted">
-                    Mobile No.:{" "}
-                    <a href={`tel:${product.mobileno}`}>
-                      {product.mobileno}
-                    </a>
-                  </h6>
-
-                  <div className="form-group mt-3">
-                    <select
-                      className="form-control"
-                      value={product.status} // Use `value` instead of `defaultValue`
-                      onChange={(e) =>
-                        handleStatusChange(product._id, e.target.value)
-                      }
-                      disabled={loading} // Disable while loading
+                  />
+                  <div className="card-body text-center">
+                    <h5 className="card-title font-weight-bold text-dark">
+                      {product.pname}
+                    </h5>
+                    <h6 className="text-muted">
+                      Order: {product.qty} {product.unit}
+                    </h6>
+                    <h6 className="text-muted">
+                      Price: {product.productperunit}₹ / {product.unit}
+                    </h6>
+                    <h6 className="text-muted">
+                      Bid: {product.bid1}₹ to {product.bid2}₹
+                    </h6>
+                    <h6 className="text-muted">
+                      Order Date: {product.orderDate}
+                    </h6>
+                    <h6 className="text-muted">--- Order Status ---</h6>
+                    <h6
+                      style={{
+                        color:
+                          product.status === "Confirm"
+                            ? "green"
+                            : product.status === "Pending"
+                            ? "blue"
+                            : product.status === "Cancel"
+                            ? "red"
+                            : "black",
+                      }}
                     >
-                      <option value="Pending">Pending</option>
-                      <option value="Confirm">Confirm</option>
-                      <option value="Cancel">Cancel</option>
-                    </select>
+                      Status: {product.status}
+                    </h6>
+
+                    <h6 className="text-muted">--- Contact Seller ---</h6>
+                    {/* Clickable Email */}
+                    <h6 className="text-muted">
+                      Email:{" "}
+                      <a href={`mailto:${product.clientemail}`}>
+                        {product.clientemail}
+                      </a>
+                    </h6>
+                    {/* Clickable Phone */}
+                    <h6 className="text-muted">
+                      Mobile No.:{" "}
+                      <a href={`tel:${product.mobileno}`}>
+                        {product.mobileno}
+                      </a>
+                    </h6>
+
+                    <div className="form-group mt-3">
+                      <select
+                        className="form-control"
+                        value={product.status}
+                        onChange={(e) =>
+                          handleStatusChange(product._id, e.target.value)
+                        }
+                        disabled={loading} // Disable while loading
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Confirm">Confirm</option>
+                        <option value="Cancel">Cancel</option>
+                      </select>
+                    </div>
                   </div>
-                  {/* {product.status !== "Cancle" ? (
-                    <button
-                      className="btn btn-danger btn-block rounded-pill mt-3"
-                      onClick={() => handleDelete(product._id)}
-                      disabled={loading} // Disable button while loading
-                    >
-                      Cancel Order
-                    </button>
-                  ) : (
-                    <span></span>
-                  )} */}
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 

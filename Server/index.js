@@ -290,10 +290,16 @@ app.post("/order", async (req, res) => {
 
   try {
     let {
-      productId,
+      image,
+      pname,
+      productperunit,
+      currency,
+      unit,
       qty,
       mobileno,
+      adminmobileno,
       clientemail,
+      adminemail,
       userID,
       totalprice,  // Corrected field name
       status,
@@ -304,10 +310,16 @@ app.post("/order", async (req, res) => {
 
     // Creating a new order object using the schema
     let result = new orderData({
-      productId,
+      image,
+      pname,
+      productperunit,
+      currency,
+      unit,
       qty,
       mobileno,
+      adminmobileno,
       clientemail,
+      adminemail,
       userID,
       totalprice,  // Corrected field name
       status,
@@ -336,8 +348,7 @@ app.get("/orders/:clientemail", async (req, res) => {
     // console.log
 
     console.log("Try catch email", clientemail);
-    const order = await orderData.find({clientemail: clientemail }).populate("productId");
-    // const order = await orderData.find({clientemail: clientemail });
+    const order = await orderData.find({clientemail: clientemail });
     // const order = await orderData.findOne();
 
     console.log(order);
@@ -352,56 +363,57 @@ app.get("/orders/:clientemail", async (req, res) => {
   }
 });
 
-
 app.delete("/orderDelete/:id", async (req, res) => {
-  // console.log("Delete Product");
   try {
     const { id } = req.params;
 
-    const deletedOrder = await orderData.findByIdAndDelete(id);
-
-    console.log(deletedOrder);
-
-
-    const product = await ProductData.findById(deletedOrder.productId); // Assuming order has productId field
-
-    
-
-    // console.log("peroduct :: " , product);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    product.qty =  parseInt(product.qty) + parseInt(deletedOrder.qty); // Add back the quantity from the order
-    await product.save();
-
-    if (!deletedOrder) {
-      return res
-        .status(404)
-        .json({ error: true, message: "Product not found" });
-    }
-
-    res.status(200).json({ message: "Product deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting product:", error);
-    res.status(500).json({ error: true });
-  }
-});
-
-//admin order list
-
-app.get("/adminorder/:adminemail", async (req, res) => {
-  console.log("Admin ID from params:", req.params);
-  try {
-    const { adminemail } = req.params;
-
-    console.log("Inside try-catch, Admin ID:", adminemail);
-
-    const order = await orderData.find({ adminemail: adminemail });
+    // Find the order by ID
+    const order = await orderData.findById(id);
 
     console.log(order);
     if (!order) {
-      return res.status(404).json({ error: true, message: "order not found" });
+      return res.status(404).json({ error: true, message: "Order not found" });
+    }
+
+    // Find the related product in productData using pname (product name)
+    const product = await ProductData.findOne({ pname: order.pname });
+    if (!product) {
+      return res.status(404).json({ error: true, message: "Product not found" });
+    }
+
+    // Update the product's quantity by adding the deleted order quantity back
+    product.qty = (parseInt(product.qty) + parseInt(order.qty)).toString(); // convert to integer and add
+    await product.save(); // save the updated product
+
+    // Delete the order from the orderData collection
+    const deletedOrder = await orderData.findByIdAndDelete(id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ error: true, message: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Order deleted and product quantity updated successfully" });
+  } catch (error) {
+    console.error("Error deleting order:", error);
+    res.status(500).json({ error: true, message: "Server error" });
+  }
+});
+
+
+app.get("/AdminOrders/:adminemail", async (req, res) => {
+  console.log(req.params.adminemail);
+  try {
+    const { adminemail } = req.params;
+
+    // console.log
+
+    console.log("Try catch email", adminemail);
+    const order = await orderData.find({adminemail: adminemail });
+    // const order = await orderData.findOne();
+
+    console.log(order);
+    if (!order) {
+      return res.status(404).json({ error: true, message: "Order not found" });
     }
 
     res.status(200).json(order);
@@ -428,36 +440,6 @@ app.get("/products/:adminemail", async (req, res) => {
     res.status(500).json({ error: true, message: "Failed to fetch products." });
   }
 });
-
-// app.put('/updateOrderStatus/:id', async (req, res) => {
-//   const { status } = req.body;
-
-//   console.log("Order Status:", req.params.status);
-//   console.log("Order ID: ", req.params.id);
-
-//   if (!status) {
-//     return res.status(400).json({ message: 'Status is required' });
-//   }
-
-//   try {
-//     const order = await orderData.findById(req.params.id);
-
-//     if (!order) {
-//       return res.status(404).json({ message: 'Order not found' });
-//     }
-
-//     console.log("Order Status: ",order.status);
-
-//     order.status = status;
-
-//     await order.save();
-
-//     res.json({ message: 'Order status updated successfully', order });
-//   } catch (error) {
-//     console.error("Error updating order status:", error);
-//     res.status(500).json({ message: error.message });
-//   }
-// });
 
 app.put("/UpdateOrderStatus/:id", async (req, res) => {
   try {

@@ -151,9 +151,15 @@ export default function ProductDetail() {
     const formattedOrderDate = `${orderDate.getDate().toString().padStart(2, '0')}/${(orderDate.getMonth() + 1).toString().padStart(2, '0')}/${orderDate.getFullYear()}`;
   
     const orderData = {
-      productId : product._id,
+      image:product.image,
+      pname: product.pname,
+      productperunit: product.productperunit,
+      currency: product.currency,
+      unit: product.unit,
       qty: quantity,
       mobileno: usermobileno,
+      adminmobileno: adminmobile,
+      adminemail: adminEmail,
       clientemail: userEmail,
       userID: userID,
       totalprice: totalPrice,
