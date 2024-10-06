@@ -6,7 +6,7 @@ const PrivateRoute = ({children}) => {
 
   console.log(isLogin);
 
-  if(isLogin && isLogin == "true"){
+  if(isLogin && isLogin === "true"){
     console.log("user are login");
     return children;
   }else{

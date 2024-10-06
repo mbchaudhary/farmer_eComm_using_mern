@@ -64,7 +64,7 @@ export default function AddProduct() {
       setIsSubmitting(true); // Disable the button during form submission
       try {
         // API call to add product
-        const response = await fetch("http://localhost:5000/addproduct", {
+        const response = await fetch("https://farmer-backend-api.onrender.com/addproduct", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

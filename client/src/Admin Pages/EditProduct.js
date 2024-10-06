@@ -29,7 +29,7 @@ export default function EditProduct() {
 
   useEffect(() => {
     // Fetch product details to prefill the form
-    fetch(`http://localhost:5000/product/${id}`)
+    fetch(`https://farmer-backend-api.onrender.com/product/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setFormData(data); // Prefill the form with product data
@@ -54,7 +54,7 @@ export default function EditProduct() {
     setIsSubmitting(true);
   
     try {
-      const response = await fetch(`http://localhost:5000/editproduct/${id}`, {
+      const response = await fetch(`https://farmer-backend-api.onrender.com/editproduct/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function Register() {
-  const apiURL = "http://localhost:5000/addUserData";
+  const apiURL = "https://farmer-backend-api.onrender.com/addUserData";
 
   const [formData, setFormData] = useState({
     username: "",
