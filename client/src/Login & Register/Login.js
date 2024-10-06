@@ -4,11 +4,13 @@ import Swal from "sweetalert2";
 import '../App.css';
 
 export default function Login() {
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  const [loading, setLoading] = useState(false); // Loading state
   const nav = useNavigate();
 
   const handleChange = (e) => {
@@ -20,6 +22,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:5000/login", {
@@ -40,12 +43,11 @@ export default function Login() {
           showConfirmButton: false,
           timer: 1500,
         });
-
+        localStorage.setItem("isLogin", true);
         localStorage.setItem("useremail", formData.email);
         localStorage.setItem("userName", result.username);
         localStorage.setItem("mobileno", result.mobileno);
         localStorage.setItem("userID", result.id);
-
         nav("/switchrole");
       } else {
         Swal.fire("Error", result.message, "error");
@@ -53,6 +55,8 @@ export default function Login() {
     } catch (error) {
       console.error("Error logging in:", error);
       Swal.fire("Error", "An error occurred. Please try again.", "error");
+    } finally {
+      setLoading(false); // Set loading to false when request finishes
     }
   };
 
@@ -61,7 +65,7 @@ export default function Login() {
       className="container-fluid d-flex justify-content-center align-items-center vh-100"
       style={{
         backgroundImage: "url('Assets/LoginBG.png')", // Replace with your image path
-        backgroundSize: "cover", 
+        backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         minHeight: "100vh", // Ensures it covers the full screen height
@@ -92,6 +96,7 @@ export default function Login() {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={loading} // Disable input when loading
             />
             <div className="invalid-feedback">Please enter a valid email.</div>
           </div>
@@ -109,6 +114,7 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
               required
+              disabled={loading} // Disable input when loading
             />
             <div className="invalid-feedback">Please enter your password.</div>
           </div>
@@ -122,8 +128,20 @@ export default function Login() {
             </Link>
           </div>
 
-          <button type="submit" className="btn primaryBGColor btn-block w-100">
-            Login
+          <button
+            type="submit"
+            className="btn primaryBGColor btn-block w-100"
+            disabled={loading} // Disable button when loading
+          >
+            {loading ? (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
       </div>

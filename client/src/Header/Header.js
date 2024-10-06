@@ -62,6 +62,7 @@ export default function Header() {
                 type="button"
                 onClick={() => {
                   nav("/");
+                  localStorage.removeItem("isLogin");
                   localStorage.removeItem("userName");
                 }}
               >
@@ -106,6 +107,7 @@ export default function Header() {
                 type="button"
                 onClick={() => {
                   nav("/");
+                  localStorage.removeItem("isLogin");
                   localStorage.removeItem("userName");
                 }}
               >

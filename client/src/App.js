@@ -12,29 +12,29 @@ import AdminHomePage from "./Admin Routing/AdminHomePage";
 import AdminOrderPage from "./Admin Routing/AdminOrderPage";
 import AddProductPage from "./Admin Routing/AddProductPage";
 import EditProductPage from "./Admin Routing/EditProductPage";
+import PrivateRoute from "./Util/PrivateRoute"; // Ensure this path is correct
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* client routing */}
+        {/* Private routes - wrapped individually */}
+        <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+        <Route path="/switchrole" element={<PrivateRoute><SwitchRole /></PrivateRoute>} />
+        <Route path="/productdetail/:id" element={<PrivateRoute><ProductDetailPage /></PrivateRoute>} />
+        <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
+        <Route path="/services" element={<PrivateRoute><ServicesPage /></PrivateRoute>} />
 
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/switchrole" element={<SwitchRole />} />
-        <Route path="/productdetail/:id" element={<ProductDetailPage />} />
-        <Route path="/orders" element={<OrderPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-
-        {/* admin routing */}
-
-        <Route path="/admin_home" element={<AdminHomePage />} />
-        <Route path="/admin_order" element={<AdminOrderPage />} />
-        <Route path="/add_product" element={<AddProductPage />} />
-        <Route path="/edit_product/:id" element={<EditProductPage />} />
+        {/* Admin protected routes */}
+        <Route path="/admin_home" element={<PrivateRoute><AdminHomePage /></PrivateRoute>} />
+        <Route path="/admin_order" element={<PrivateRoute><AdminOrderPage /></PrivateRoute>} />
+        <Route path="/add_product" element={<PrivateRoute><AddProductPage /></PrivateRoute>} />
+        <Route path="/edit_product/:id" element={<PrivateRoute><EditProductPage /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   );
