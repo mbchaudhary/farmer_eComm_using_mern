@@ -19,7 +19,7 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch("https://farmer-backend-api.onrender.com/product/" + param.id);
+        const response = await fetch("http://localhost:5000/product/" + param.id);
         if (!response.ok) {
           throw new Error("Product not found");
         }
@@ -106,7 +106,7 @@ export default function ProductDetail() {
   //   };
   
   //   try {
-  //     const response = await fetch("https://farmer-backend-api.onrender.com/order", {
+  //     const response = await fetch("http://localhost:5000/order", {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
@@ -176,7 +176,7 @@ export default function ProductDetail() {
   
     try {
       // Send the order data
-      const orderResponse = await fetch("https://farmer-backend-api.onrender.com/order", {
+      const orderResponse = await fetch("http://localhost:5000/order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -186,7 +186,7 @@ export default function ProductDetail() {
   
       // If order is placed successfully, update the product quantity
       if (orderResponse.ok) {
-        const updateResponse = await fetch(`https://farmer-backend-api.onrender.com/editproduct/${product._id}`, {
+        const updateResponse = await fetch(`http://localhost:5000/editproduct/${product._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

@@ -12,7 +12,8 @@ import AdminHomePage from "./Admin Routing/AdminHomePage";
 import AdminOrderPage from "./Admin Routing/AdminOrderPage";
 import AddProductPage from "./Admin Routing/AddProductPage";
 import EditProductPage from "./Admin Routing/EditProductPage";
-import PrivateRoute from "./Util/PrivateRoute"; // Ensure this path is correct
+import PrivateRoute from "./Util/PrivateRoute";
+import AllBuyerListPage from "./Admin Routing/AllBuyerListPage";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         {/* Admin protected routes */}
         <Route path="/admin_home" element={<PrivateRoute><AdminHomePage /></PrivateRoute>} />
         <Route path="/admin_order" element={<PrivateRoute><AdminOrderPage /></PrivateRoute>} />
+        <Route path="/all_buyer" element={<PrivateRoute><AllBuyerListPage /></PrivateRoute>} />
         <Route path="/add_product" element={<PrivateRoute><AddProductPage /></PrivateRoute>} />
         <Route path="/edit_product/:id" element={<PrivateRoute><EditProductPage /></PrivateRoute>} />
       </Routes>

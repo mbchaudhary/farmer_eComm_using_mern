@@ -7,7 +7,7 @@ export default function Order() {
 
   useEffect(() => {
     if (userEmail) {
-      fetch(`https://farmer-backend-api.onrender.com/orders/${userEmail}`)
+      fetch(`http://localhost:5000/orders/${userEmail}`)
         .then((res) => res.json())
         .then((data) => setProducts(data))
         .catch((err) => console.error("Error fetching products:", err));
@@ -28,7 +28,7 @@ export default function Order() {
     if (confirmDelete.isConfirmed) {
       try {
         const response = await fetch(
-          `https://farmer-backend-api.onrender.com/orderDelete/${id}`,
+          `http://localhost:5000/orderDelete/${id}`,
           {
             method: "DELETE",
           }
