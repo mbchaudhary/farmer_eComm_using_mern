@@ -21,7 +21,7 @@ export default function Profile() {
     if (localData) {
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/userdata/${localData}`);
+          const response = await fetch(`https://farmer-backend-api.onrender.com/userdata/${localData}`);
           if (!response.ok) {
             throw new Error("Failed to fetch user data");
           }
@@ -42,7 +42,7 @@ export default function Profile() {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/userdata/${localData}`, {
+      const response = await fetch(`https://farmer-backend-api.onrender.com/userdata/${localData}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

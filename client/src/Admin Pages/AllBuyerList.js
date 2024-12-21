@@ -15,7 +15,7 @@ export default function AllBuyerList() {
                 setError(null);
                 console.log("Admin email for API request:", emailID);
 
-                const response = await fetch(`http://localhost:5000/AdminOrders/${emailID}`);  // API call to fetch orders for the given admin email
+                const response = await fetch(`https://farmer-backend-api.onrender.com/AdminOrders/${emailID}`);  // API call to fetch orders for the given admin email
                 
                 if (!response.ok) {
                     throw new Error(`Failed to fetch order data, status: ${response.status}`);
